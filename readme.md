@@ -8,3 +8,5 @@ language: vue,go
 
 Unfinished...
 
+已知BUG：打开txt乱码
+

@@ -9,6 +9,9 @@
                 <el-dropdown-item v-for="i in driver" v-bind:command="i">{{ i }}</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
+        <el-dropdown split-button type="info" v-if="os != 'windows'" @command="handleCommand" @click="clickDriver">
+            /
+        </el-dropdown>
         <el-button-group>
             <el-button type="primary"  v-for="(i,index) in path" v-bind:val="index" @click="clickH($event)">{{ i }}<i class="el-icon-arrow-right el-icon--right"></i></el-button>
         </el-button-group>
@@ -38,20 +41,29 @@ export default {
   created() {
     var that = this;
     console.log("in created func")
-      axios.get("http://39.106.30.91:8000/getos")
+      axios.get("http://localhost:8000/getos")
           .then(function (response) {
               // console.log(response.data)
               that.os = response.data.os
               that.driver = response.data.data
               if(that.os != "windows"){
                   that.current_driver = [];
+                  axios.get("http://localhost:8000/index/")
+                      .then(function (response) {
+                          // console.log(response.data.data)
+                          that.data = response.data.data
+                      })
+
+              }else{
+                  axios.get("http://localhost:8000/index/c")
+                      .then(function (response) {
+                          // console.log(response.data.data)
+                          that.data = response.data.data
+                      })
               }
           })
-    axios.get("http://39.106.30.91:8000/index/c")
-    .then(function (response) {
-      // console.log(response.data.data)
-        that.data = response.data.data
-    })
+
+
   },
   methods:{
       clickDriver(e){
@@ -62,7 +74,13 @@ export default {
         let that = this;
         let pos = e.target.getAttribute("val")||e.target.parentNode.getAttribute("val");
         this.path = this.path.slice(0,Number(pos)+1)
-          axios.get("http://39.106.30.91:8000/index/"+this.current_driver.substring(0,1)+"/"+this.path.join("/"))
+          let str = ""
+        if(that.os == "windows"){
+            str = "http://localhost:8000/index/"+this.current_driver.substring(0,1)+"/"+this.path.join("/")
+        }else{
+            str = "http://localhost:8000/index/"+this.path.join("/")
+        }
+          axios.get(str)
               .then(function (response) {
                   that.data =  response.data.data;
               })
@@ -78,13 +96,24 @@ export default {
           // console.log(typ)              // 类型 1为文件夹，2为文件
           this.path.push(path)
           if(typ == "1"){
-              axios.get("http://39.106.30.91:8000/index/"+this.current_driver.substring(0,1)+"/"+this.path.join("/"))
+              let str = ""
+              if (that.os == "windows"){
+                  str = "http://localhost:8000/index/"+this.current_driver.substring(0,1)+"/"+this.path.join("/")
+              }else{
+                  str = "http://localhost:8000/index/"+this.path.join("/")
+              }
+              axios.get(str)
                   .then(function (response) {
                       that.data =  response.data.data;
                   })
           }else{
-
-              window.open("http://39.106.30.91:8000/file/"+this.current_driver.substring(0,1)+"/"+this.path.join("/"))
+              let str = ""
+              if(that.os == "windows"){
+                  str = "http://localhost:8000/file/"+this.current_driver.substring(0,1)+"/"+this.path.join("/")
+              }else{
+                  str = "http://localhost:8000/file/"+this.path.join("/")
+              }
+              window.open(str)
               this.path.pop()
           }
 
@@ -92,12 +121,18 @@ export default {
       handleCommand(command) {
           let that = this;
           this.$message('click on item ' + command);
-          this.current_driver = command;
-          this.path = [];
-          axios.get("http://39.106.30.91:8000/index/"+this.current_driver.substring(0,1))
-          .then(function (response) {
-              that.data =  response.data.data;
-          })
+          let str = ""
+          if(that.os == "windows"){
+              this.current_driver = command;
+              str = "http://localhost:8000/index/"+this.current_driver.substring(0,1)
+          }else{
+              str = "http://localhost:8000/index/"
+          }
+              this.path = [];
+              axios.get(str)
+                  .then(function (response) {
+                      that.data =  response.data.data;
+                  })
       }
   },
   data(){

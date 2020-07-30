@@ -42,7 +42,7 @@ func getFile(path string)[]fileInfo{
 	}
 	ret := make([]fileInfo,0,25)
 	tmp := make([]fileInfo,0,25)
-	
+
 	dirList, err := ioutil.ReadDir(path)
 	errHandle(1,err)
 	for _,v := range dirList{

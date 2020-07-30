@@ -4,12 +4,12 @@ import (
 	//"bytes"
 	//"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"os"
 	"runtime"
 	"strings"
 	"time"
-	"github.com/gin-gonic/gin"
 )
 
 func errHandle(i int,err error){
@@ -35,12 +35,14 @@ type fileInfo struct {
 	FileSize int64 `json:"FileSize"`
 }
 func getFile(path string)[]fileInfo{
-	// 必须特殊处理，，，
-	if path == "c:"{
-		path = "c:/"
+	// 必须特殊处理，，，在程序运行目录所在盘不OK，奇怪
+
+	if len(path) == 2 && runtime.GOOS == "windows"{
+		path = path + "/"
 	}
 	ret := make([]fileInfo,0,25)
 	tmp := make([]fileInfo,0,25)
+	
 	dirList, err := ioutil.ReadDir(path)
 	errHandle(1,err)
 	for _,v := range dirList{
@@ -93,7 +95,9 @@ func pathMerge(path []string,os string)string{
 }
 
 
+
 func main() {
+	// 后端传类名 设置图标
 
 	os := runtime.GOOS
 	fmt.Println(os)
@@ -102,12 +106,10 @@ func main() {
 	r.Use(Cors("*","",""))
 	// 获取操作系统
 	r.GET("/getos", func(c *gin.Context) {
-		if os == "windows"{
-			c.JSON(200,gin.H{
-				"os":os,
-				"data": GetLogicalDrives(),
-			})
-		}
+		c.JSON(200,gin.H{
+			"os":os,
+			"data": GetLogicalDrives(),
+		})
 
 	})
 	indexHandler := r.Group("/index")
@@ -138,6 +140,20 @@ func main() {
 			"data": getFile(pathEnd),
 			"os":   os,
 		})
+	})
+
+	fileHandler := r.Group("file")
+	fileHandler.GET("/*act", func(c *gin.Context) {
+		pathParam,ok := c.Params.Get("act")
+		if !ok {
+			// URI获取失败
+
+		}
+		pathSlice := strings.Split(pathParam,`/`)
+		pathEnd := pathMerge(pathSlice,os)
+
+		c.Header("content-type",getContentType(pathEnd[strings.LastIndex(pathEnd,".")+1:]))
+		c.File(pathEnd)
 	})
 	r.Run(":8000")
 }

@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="883818e4-87e5-4658-943e-1748ccaa11d6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/hello/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/hello/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hello/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/hello/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hello/src/components/HelloWorld.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hello/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/hello/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../后端/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../后端/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../后端/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../后端/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../后端/windows.go" beforeDir="false" afterPath="$PROJECT_DIR$/../后端/windows.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +15,7 @@
   </component>
   <component name="GOROOT" path="D:\EnvironMent\go14" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/hello" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1fLLgk2CSSBeV3sfDbr6UCDMLR2" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />

@@ -3,7 +3,7 @@
     here is app div.
     <br>这里是路径
     <div id="exp">
-        <el-dropdown split-button type="info" v-if="os == 'windows'" @command="handleCommand">
+        <el-dropdown split-button type="info" v-if="os == 'windows'" @command="handleCommand" @click="clickDriver">
             {{current_driver}}
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="i in driver" v-bind:command="i">{{ i }}</el-dropdown-item>
@@ -38,25 +38,31 @@ export default {
   created() {
     var that = this;
     console.log("in created func")
-      axios.get("http://localhost:8000/getos")
+      axios.get("http://39.106.30.91:8000/getos")
           .then(function (response) {
               // console.log(response.data)
               that.os = response.data.os
               that.driver = response.data.data
+              if(that.os != "windows"){
+                  that.current_driver = [];
+              }
           })
-    axios.get("http://localhost:8000/index/c")
+    axios.get("http://39.106.30.91:8000/index/c")
     .then(function (response) {
       // console.log(response.data.data)
         that.data = response.data.data
     })
   },
   methods:{
+      clickDriver(e){
+          this.handleCommand(this.current_driver)
+      },
       clickH(e){
         console.log("clickH")
         let that = this;
         let pos = e.target.getAttribute("val")||e.target.parentNode.getAttribute("val");
         this.path = this.path.slice(0,Number(pos)+1)
-          axios.get("http://localhost:8000/index/"+this.current_driver.substring(0,1)+"/"+this.path.join("/"))
+          axios.get("http://39.106.30.91:8000/index/"+this.current_driver.substring(0,1)+"/"+this.path.join("/"))
               .then(function (response) {
                   that.data =  response.data.data;
               })
@@ -72,10 +78,14 @@ export default {
           // console.log(typ)              // 类型 1为文件夹，2为文件
           this.path.push(path)
           if(typ == "1"){
-              axios.get("http://localhost:8000/index/"+this.current_driver.substring(0,1)+"/"+this.path.join("/"))
+              axios.get("http://39.106.30.91:8000/index/"+this.current_driver.substring(0,1)+"/"+this.path.join("/"))
                   .then(function (response) {
                       that.data =  response.data.data;
                   })
+          }else{
+
+              window.open("http://39.106.30.91:8000/file/"+this.current_driver.substring(0,1)+"/"+this.path.join("/"))
+              this.path.pop()
           }
 
       },
@@ -84,7 +94,7 @@ export default {
           this.$message('click on item ' + command);
           this.current_driver = command;
           this.path = [];
-          axios.get("http://localhost:8000/index/"+this.current_driver.substring(0,1))
+          axios.get("http://39.106.30.91:8000/index/"+this.current_driver.substring(0,1))
           .then(function (response) {
               that.data =  response.data.data;
           })

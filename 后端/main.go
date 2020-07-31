@@ -155,5 +155,7 @@ func main() {
 		c.Header("content-type",getContentType(pathEnd[strings.LastIndex(pathEnd,".")+1:]))
 		c.File(pathEnd)
 	})
+
+
 	r.Run(":8000")
 }
